@@ -1,0 +1,201 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/*
+ * The site is light-only for now. This line must stay even without a dark theme:
+ * it ties shadcn's `dark:` classes to a `.dark` class that is never set. Without
+ * it, those classes would follow the visitor's operating system setting.
+ */
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brand-teal: var(--brand-teal);
+  --color-brand-teal-strong: var(--brand-teal-strong);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-lora), ui-serif, Georgia, serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --navy: #142b4a;
+  --brand-teal: #287c78;
+  --brand-teal-strong: #1b5f5c;
+  --warm-white: #fafaf7;
+  --charcoal: #252b32;
+  --soft-gray: #e2e3de;
+  --surface-gray: #f1f1ec;
+
+  --background: var(--warm-white);
+  --foreground: var(--charcoal);
+  --card: #ffffff;
+  --card-foreground: var(--charcoal);
+  --popover: #ffffff;
+  --popover-foreground: var(--charcoal);
+  --primary: var(--navy);
+  --primary-foreground: var(--warm-white);
+  --secondary: var(--surface-gray);
+  --secondary-foreground: var(--navy);
+  --muted: var(--surface-gray);
+  --muted-foreground: #5b6470;
+  --accent: var(--surface-gray);
+  --accent-foreground: var(--navy);
+  --destructive: #b3261e;
+  --border: var(--soft-gray);
+  --input: #cfd1ca;
+  --ring: var(--brand-teal);
+  --chart-1: var(--navy);
+  --chart-2: var(--brand-teal);
+  --chart-3: #6b8fb5;
+  --chart-4: #8fbdb9;
+  --chart-5: #5b6470;
+  --radius: 0.375rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: var(--charcoal);
+  --sidebar-primary: var(--navy);
+  --sidebar-primary-foreground: var(--warm-white);
+  --sidebar-accent: var(--surface-gray);
+  --sidebar-accent-foreground: var(--navy);
+  --sidebar-border: var(--soft-gray);
+  --sidebar-ring: var(--brand-teal);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading text-primary;
+  }
+}
+
+/* Long-form reading: article bodies and the rich-text editor share these styles. */
+.article-body {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+.article-body > * + * {
+  margin-top: 1.25em;
+}
+.article-body h2 {
+  margin-top: 2em;
+  font-size: 1.625rem;
+  line-height: 1.3;
+  font-weight: 600;
+  /* Leaves room for the sticky header when jumping from the table of contents. */
+  scroll-margin-top: 6rem;
+}
+.article-body > :first-child {
+  margin-top: 0;
+}
+.article-body h3 {
+  margin-top: 1.75em;
+  font-size: 1.3rem;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.article-body h4 {
+  margin-top: 1.5em;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.article-body a {
+  color: var(--brand-teal);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.article-body ul {
+  list-style: disc;
+  padding-left: 1.5em;
+}
+.article-body ol {
+  list-style: decimal;
+  padding-left: 1.5em;
+}
+.article-body li + li {
+  margin-top: 0.4em;
+}
+.article-body blockquote {
+  border-left: 3px solid var(--brand-teal);
+  padding-left: 1.1em;
+  color: var(--muted-foreground);
+  font-family: var(--font-lora), Georgia, serif;
+}
+.article-body code {
+  border-radius: 4px;
+  background: var(--surface-gray);
+  padding: 0.1em 0.35em;
+  font-size: 0.9em;
+}
+.article-body pre {
+  overflow-x: auto;
+  border-radius: 6px;
+  background: var(--navy);
+  padding: 1em;
+  color: var(--warm-white);
+}
+.article-body pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+.article-body hr {
+  border-color: var(--soft-gray);
+}
+.ProseMirror {
+  min-height: 20rem;
+  padding: 1rem;
+  outline: none;
+}

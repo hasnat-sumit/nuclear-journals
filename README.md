@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nuclear Journal
 
-## Getting Started
+An editorial publishing platform for nuclear science, nuclear engineering, nuclear energy, radiation protection and nuclear safety.
 
-First, run the development server:
+Qualified writers submit articles, reviewers evaluate them in confidence, and editors make every publication decision. Anyone can read published articles without an account.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+This is an editorial publication, not a formal academic peer-reviewed journal.
+
+## Project status
+
+All seven phases are built and tested locally. It has not been deployed: see [Deploying](#deploying) for what that needs.
+
+## How the pieces fit together
+
+```text
+Browser ──> client/ (Next.js, port 3000) ──> server/ (Express, port 4000) ──> MongoDB
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Folder    | What it is                                              | Deploys to             |
+| --------- | ------------------------------------------------------- | ---------------------- |
+| `client/` | The website: pages, components and styling              | Vercel                 |
+| `server/` | The REST API: business rules, permissions and data      | A managed Node.js host |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The two apps are separate on purpose. All permission checks live in the API, so hiding something in the website is never the only protection.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The browser only ever talks to the website. Next.js forwards `/api/v1` requests to Express, which keeps login cookies first-party.
 
-## Learn More
+The repository uses **npm workspaces**: one `npm install` at the root sets up both apps and creates a single lockfile.
 
-To learn more about Next.js, take a look at the following resources:
+### Backend layout
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```text
+server/src/
+├── config/       Environment variables and database connection
+├── constants.ts  Roles and statuses, including the writer-status mapping
+├── lib/          Auth, email, HTML sanitizing, shared request helpers
+├── middleware/   Login and role checks, error handling
+├── models/       Database collections
+├── routes/       URLs, validation and thin request handlers
+├── services/     Business rules: workflow, assignment, notifications, serializers
+├── app.ts        Builds the Express app (tests use this directly)
+└── server.ts     Connects to the database and starts listening
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Handlers live with their routes rather than in separate controller files, because most are only a few lines. Real business rules are in `services/`.
 
-## Deploy on Vercel
+### Frontend layout
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Public pages are server-rendered for search engines and always show current data. Dashboards load their data in the browser, because they are private and change often.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Getting started
+
+You need Node.js 22.12 or newer. No external accounts are needed to run it locally.
+
+```bash
+# 1. Install dependencies for both apps
+npm install
+
+# 2. Create your local environment files
+cp server/.env.example server/.env
+cp client/.env.example client/.env.local
+
+# 3. In one terminal, start a local database (keep it running)
+npm run dev:db
+
+# 4. In a second terminal, add sample data once, then start both apps
+npm run seed
+npm run dev
+```
+
+Open <http://localhost:3000>. The seed command prints four demo accounts, one for each role.
+
+Locally, emails such as verification links are printed in the terminal running the API.
+
+## Commands
+
+Run these from the repository root.
+
+| Command             | What it does                                 |
+| ------------------- | -------------------------------------------- |
+| `npm run dev:db`    | Starts a local database, kept in `server/.dev-db` |
+| `npm run seed`      | Adds categories, demo accounts and sample articles |
+| `npm run dev`       | Starts the API and the website               |
+| `npm run lint`      | Checks code style and common mistakes        |
+| `npm run typecheck` | Checks TypeScript types in both apps         |
+| `npm test`          | Runs the API tests against a real temporary database |
+| `npm run build`     | Builds both apps for production              |
+| `npm run check`     | Runs lint, types, tests and build            |
+
+To make someone an editor, have them register first, then run:
+
+```bash
+npm run make-editor -w server -- person@example.com
+```
+
+## Deploying
+
+You will need accounts for MongoDB Atlas, Cloudinary, an email (SMTP) provider, Vercel, and a Node.js host for the API.
+
+**API (Node.js host).** Use the repository root, build with `npm ci && npm run build -w server`, and start with `npm start -w server`. Set these variables, using `server/.env.example` as the guide:
+
+`NODE_ENV=production`, `MONGODB_URI`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `CLIENT_ORIGINS`, `INTERNAL_API_KEY`, `SMTP_URL`, `EMAIL_FROM`, `CLOUDINARY_URL`, `TRUST_PROXY_HOPS`.
+
+The API refuses to start if a required value is missing or still a development default. Use `/api/v1/health` as the host's health check path.
+
+**Website (Vercel).** Set the root directory to `client`. Set `API_URL`, `INTERNAL_API_KEY` (the same value as the API), `SITE_URL` and `CONTACT_EMAIL`.
+
+**First run.** With the API's production variables set, seed the categories with `npm run seed -w server -- --categories-only`, register your own account on the website, then run `make-editor` for it.
+
+## Environment variables
+
+Each app documents its variables in its own `.env.example`. Real `.env` files hold secrets and are ignored by Git.
