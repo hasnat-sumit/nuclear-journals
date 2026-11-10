@@ -33,7 +33,8 @@ function ActiveNavLinks({ className }: { className?: string }) {
 
 function LinkList({ className, pathname }: { className?: string; pathname: string | null }) {
   return (
-    <ul className={cn("flex items-center gap-6 text-sm", className)}>
+    // Tighter and evenly spread on phones, so all five links fit without scrolling.
+    <ul className={cn("flex items-center justify-between gap-4 text-sm sm:justify-start sm:gap-6", className)}>
       {LINKS.map((link) => {
         const active = pathname !== null && isActive(pathname, link.href);
         return (

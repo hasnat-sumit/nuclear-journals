@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <>
       <Banner />
-      <div className="mx-auto flex max-w-7xl flex-col gap-20 px-4 sm:px-6">
+      <div className="mx-auto flex max-w-7xl flex-col gap-16 px-4 pt-12 sm:px-6 md:gap-20 md:pt-16">
         <Suspense fallback={<LoadingSkeleton rows={5} />}>
           <HomeArticleSections />
         </Suspense>

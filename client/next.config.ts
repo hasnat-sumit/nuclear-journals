@@ -21,7 +21,11 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "res.cloudinary.com" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "res.cloudinary.com" },
+      // Profile photos of people who signed in with Google.
+      { protocol: "https", hostname: "lh3.googleusercontent.com" },
+    ],
   },
   // The browser talks only to this website, which forwards API calls to Express.
   // Login cookies therefore stay first-party, even with the API on another domain.

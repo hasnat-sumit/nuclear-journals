@@ -72,6 +72,17 @@ Open <http://localhost:3000>. The seed command prints four demo accounts, one fo
 
 Locally, emails such as verification links are printed in the terminal running the API.
 
+### Google sign-in (optional)
+
+The sign-in and sign-up pages show a "Continue with Google" button. It works once the API has Google credentials:
+
+1. In the [Google Cloud console](https://console.cloud.google.com/apis/credentials), set up the OAuth consent screen, then create an **OAuth client ID** of type **Web application**.
+2. Under **Authorized JavaScript origins**, add `http://localhost:3000` (and your production website address).
+3. Under **Authorized redirect URIs**, add `http://localhost:3000/api/v1/auth/callback/google` (and the same path on your production address). This is `BETTER_AUTH_URL` + `/api/v1/auth/callback/google`.
+4. Put the client ID and secret in `server/.env` as `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`, then restart the API.
+
+The first Google sign-in creates a reader account; later ones sign in to it. If the email is already registered with a password, Google is linked to that account only after its email has been verified.
+
 ## Commands
 
 Run these from the repository root.
@@ -99,7 +110,7 @@ You will need accounts for MongoDB Atlas, Cloudinary, an email (SMTP) provider, 
 
 **API (Node.js host).** Use the repository root, build with `npm ci && npm run build -w server`, and start with `npm start -w server`. Set these variables, using `server/.env.example` as the guide:
 
-`NODE_ENV=production`, `MONGODB_URI`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `CLIENT_ORIGINS`, `INTERNAL_API_KEY`, `SMTP_URL`, `EMAIL_FROM`, `CLOUDINARY_URL`, `TRUST_PROXY_HOPS`.
+`NODE_ENV=production`, `MONGODB_URI`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `CLIENT_ORIGINS`, `INTERNAL_API_KEY`, `SMTP_URL`, `EMAIL_FROM`, `CLOUDINARY_URL`, `TRUST_PROXY_HOPS`, and optionally `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`.
 
 The API refuses to start if a required value is missing or still a development default. Use `/api/v1/health` as the host's health check path.
 

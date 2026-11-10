@@ -1,4 +1,15 @@
 export type Role = "reader" | "writer" | "reviewer" | "editor";
+export type SocialPlatform =
+  | "website"
+  | "linkedin"
+  | "x"
+  | "facebook"
+  | "instagram"
+  | "youtube"
+  | "github"
+  | "researchgate"
+  | "orcid"
+  | "google_scholar";
 
 export type WriterStatus =
   | "draft"
@@ -96,7 +107,23 @@ export interface ArticleDetail extends ArticleSummary {
   rating: RatingSummary;
 }
 
-export interface PublicProfile {
+export interface Education {
+  university: string;
+  subject: string;
+  passingYear: number | null;
+}
+
+export interface SocialLink {
+  platform: SocialPlatform;
+  url: string;
+}
+
+export interface ProfileExtras {
+  education: Education[];
+  socialLinks: SocialLink[];
+}
+
+export interface PublicProfile extends ProfileExtras {
   id: string;
   name: string;
   image: string | null;
@@ -118,7 +145,7 @@ export interface ApplicationView {
   decisionNote: string | null;
 }
 
-export interface Me {
+export interface Me extends ProfileExtras {
   id: string;
   name: string;
   email: string;

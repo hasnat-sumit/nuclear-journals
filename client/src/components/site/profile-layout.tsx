@@ -1,4 +1,6 @@
+import { ExternalLink, GraduationCap } from "lucide-react";
 import type { ReactNode } from "react";
+import { socialLabel } from "@/lib/social";
 import { RatingControl } from "@/components/site/article-actions";
 import { ArticleGrid } from "@/components/site/article-cards";
 import { ArticleArt } from "@/components/site/artwork";
@@ -45,6 +47,23 @@ export function ProfileLayout({
             {profile.expertise.length > 0 ? (
               <p className="text-sm text-muted-foreground">{profile.expertise.slice(0, 3).join(" · ")}</p>
             ) : null}
+            {profile.socialLinks.length > 0 ? (
+              <ul aria-label="Social media" className="flex flex-wrap gap-2">
+                {profile.socialLinks.map((link) => (
+                  <li key={`${link.platform}-${link.url}`}>
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                      className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium text-primary hover:border-primary hover:bg-primary/5"
+                    >
+                      <ExternalLink aria-hidden="true" className="size-3" />
+                      {socialLabel(link.platform)}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
             <RatingControl targetType={role} targetId={profile.id} initial={profile.rating} label={`Rate this ${role}`} />
           </div>
         </div>
@@ -72,6 +91,27 @@ export function ProfileLayout({
                       {item}
                     </li>
                   ))}
+                </ul>
+              </div>
+            ) : null}
+            {profile.education.length > 0 ? (
+              <div className="flex flex-col gap-3">
+                <h2 className="text-base font-semibold">Education</h2>
+                <ul className="flex flex-col gap-3">
+                  {[...profile.education]
+                    .sort((a, b) => (b.passingYear ?? 0) - (a.passingYear ?? 0))
+                    .map((item) => (
+                      <li key={`${item.university}-${item.subject}-${item.passingYear}`} className="flex gap-3">
+                        <GraduationCap aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-brand-teal" />
+                        <div>
+                          <p className="font-medium">{item.subject}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {item.university}
+                            {item.passingYear ? ` · ${item.passingYear}` : ""}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
                 </ul>
               </div>
             ) : null}

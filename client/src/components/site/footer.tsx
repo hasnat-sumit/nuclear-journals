@@ -31,9 +31,10 @@ const FOOTER_GROUPS = [
 export function Footer() {
   return (
     <footer className="mt-20 bg-primary text-primary-foreground">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-4 mt-6 sm:px-6 md:grid-cols-[1.4fr_repeat(3,1fr)]">
-        <div className="flex max-w-sm flex-col items-start gap-3">
-          <Link href="/" aria-label="Nuclear Journal home" className="block h-36 w-full max-w-[300px] overflow-hidden">
+      {/* The logo gets its own row until there is room for four columns, so it is never cropped. */}
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-8 px-4 pt-6 pb-10 sm:grid-cols-3 sm:px-6 lg:grid-cols-[1.4fr_repeat(3,1fr)] lg:gap-10">
+        <div className="col-span-2 flex flex-col items-start sm:col-span-3 lg:col-span-1">
+          <Link href="/" aria-label="Nuclear Journal home" className="block h-28 w-56 overflow-hidden sm:h-36 sm:w-[300px]">
             <Image
               src="/nuclear-journal-neon-logo.png"
               alt="Nuclear Journal"
@@ -43,9 +44,6 @@ export function Footer() {
               className="h-full w-full object-cover mix-blend-screen"
             />
           </Link>
-            <p className="max-w-xs text-sm leading-5 text-primary-foreground/75">
-             
-            </p>
         </div>
         {FOOTER_GROUPS.map((group) => (
           <nav key={group.title} aria-label={group.title}>
