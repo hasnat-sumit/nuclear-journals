@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && node scripts/build-vercel.mjs",
     "start": "node dist/server.js",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
@@ -36,6 +36,7 @@
     "@types/nodemailer": "^8.0.2",
     "@types/sanitize-html": "^2.16.2",
     "@types/supertest": "^7.2.0",
+    "esbuild": "^0.28.2",
     "eslint": "^9",
     "mongodb-memory-server": "^11.3.0",
     "supertest": "^7.3.1",
