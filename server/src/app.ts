@@ -54,6 +54,11 @@ export function createApp(options: { rateLimitMax?: number } = {}) {
   // Before the rate limiter, so hosting platform uptime checks are never blocked.
   app.use(`${API_PREFIX}/health`, healthRouter);
 
+  // Opening the API's bare address in a browser should say it is running, not "not found".
+  app.get(["/", API_PREFIX], (_req, res) => {
+    res.json({ service: "nuclear-journal-api", status: "ok", health: `${API_PREFIX}/health` });
+  });
+
   app.use(
     rateLimit({
       windowMs: FIFTEEN_MINUTES_MS,
