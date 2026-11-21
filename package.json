@@ -4,20 +4,20 @@
   "private": true,
   "description": "Editorial publishing platform for nuclear science, engineering and safety knowledge.",
   "workspaces": [
-    "client",
-    "server"
+    "nuclear-journal-client",
+    "nuclear-journal-server"
   ],
   "engines": {
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "concurrently --names api,web --prefix-colors cyan,green \"npm run dev -w server\" \"npm run dev -w client\"",
-    "build": "npm run build -w server && npm run build -w client",
-    "lint": "npm run lint -w server && npm run lint -w client",
-    "typecheck": "npm run typecheck -w server && npm run typecheck -w client",
-    "test": "npm run test -w server",
-    "dev:db": "npm run dev:db -w server",
-    "seed": "npm run seed -w server",
+    "dev": "concurrently --names api,web --prefix-colors cyan,green \"npm run dev -w nuclear-journal-server\" \"npm run dev -w nuclear-journal-client\"",
+    "build": "npm run build -w nuclear-journal-server && npm run build -w nuclear-journal-client",
+    "lint": "npm run lint -w nuclear-journal-server && npm run lint -w nuclear-journal-client",
+    "typecheck": "npm run typecheck -w nuclear-journal-server && npm run typecheck -w nuclear-journal-client",
+    "test": "npm run test -w nuclear-journal-server",
+    "dev:db": "npm run dev:db -w nuclear-journal-server",
+    "seed": "npm run seed -w nuclear-journal-server",
     "check": "npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "devDependencies": {

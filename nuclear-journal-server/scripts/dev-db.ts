@@ -1,5 +1,5 @@
 // A real MongoDB for local development, with no Atlas account needed.
-// Data is kept in server/.dev-db between runs. Never used in production.
+// Data is kept in nuclear-journal-server/.dev-db between runs. Never used in production.
 import { mkdirSync } from "node:fs";
 import { MongoMemoryServer } from "mongodb-memory-server";
 
